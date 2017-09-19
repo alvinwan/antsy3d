@@ -2,6 +2,7 @@ if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var renderer, scene, camera, stats;
 var pointcloud;
+var pointcloud_name;
 var raycaster;
 var mouse = new THREE.Vector2();
 var intersection = null;
@@ -12,7 +13,7 @@ var mouseDown;
 var highlightMode = false;
 
 var threshold = 0.1;
-var pointSize = 0.5;
+var pointSize = 0.25;
 
 init();
 animate();
@@ -64,10 +65,10 @@ function generatePointCloud( vertices, color ) {
     for ( var i = 0, l = vertices.length; i < l; i ++ ) {
 
         vertex = vertices[ i ];
-        var v = new THREE.Vector3( vertex.x, vertex.y, vertex.z );
+        var v = new THREE.Vector3( vertex.x - 5, vertex.z, vertex.y );
         geometry.vertices.push( v );
 
-        var intensity = ( vertex.y + 0.1 ) * 7;
+        var intensity = ( vertex.x + 0.1 ) * 7;
         colors[ k ] = ( color.clone().multiplyScalar( intensity ) );
 
         k++;
@@ -91,9 +92,10 @@ function init() {
 
     clock = new THREE.Clock();
 
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.y = 25;
-    camera.position.z = 37;
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+    camera.position.y = 15;
+    camera.position.z = 30;
+    camera.position.x = 5;
 
     //
 
@@ -126,7 +128,7 @@ function init() {
     //
 
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.enabled = false;
+    controls.enabled = true;
 
     //
 
@@ -134,15 +136,15 @@ function init() {
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
     document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-    document.getElementById( 'save' ).addEventListener( 'click', save, false );
-    document.getElementById( 'export' ).addEventListener( 'click', save_image, false );
-    document.getElementById( 'move' ).addEventListener( 'click', moveMode, false );
-    document.getElementById( 'label' ).addEventListener( 'click', labelMode, false );
+//    document.getElementById( 'save' ).addEventListener( 'click', save, false );
+//    document.getElementById( 'export' ).addEventListener( 'click', save_image, false );
+//    document.getElementById( 'move' ).addEventListener( 'click', moveMode, false );
+//    document.getElementById( 'label' ).addEventListener( 'click', labelMode, false );
 
     //
 
-    initNav();
-    show(document.getElementById('obj0'), Object.keys(data)[0]);
+    //initNav();
+    //show(document.getElementById('obj0'), Object.keys(data)[0]);
 
 }
 
@@ -243,7 +245,12 @@ function clearNav() {
 function show(button, obj_name) {
     clearNav();
     button.className += "selected";
-    var rotation = 0;
+    display(obj_name);
+}
+
+function display(obj_name) {
+    console.log(obj_name);
+    var rotation = 1.2;
 
     if (pointcloud !== undefined) {
         scene.remove(pointcloud);
@@ -253,6 +260,7 @@ function show(button, obj_name) {
     pointcloud = generatePointCloudForCluster( obj_name );
     pointcloud.rotation.y = rotation;
     scene.add( pointcloud );
+    pointcloud_name = obj_name;
 }
 
 function generatePointCloudForCluster(obj_name) {
@@ -290,7 +298,7 @@ function save() {
 
 function save_image() {
     renderer.domElement.toBlob(function (blob) {
-        saveAs(blob, "image.png");
+        saveAs(blob, pointcloud_name + ".png");
     });
 }
 
