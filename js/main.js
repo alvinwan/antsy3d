@@ -37,7 +37,7 @@ function generatePointCloudGeometry( vertices, color ){
         positions[ 3 * k + 1 ] = vertex.y;
         positions[ 3 * k + 2 ] = vertex.z;
 
-        var intensity = ( vertex.y + 0.1 ) * 5;
+        var intensity = ( vertex.class + 0.1 ) * 5;
         colors[ 3 * k ] = color.r * intensity;
         colors[ 3 * k + 1 ] = color.g * intensity;
         colors[ 3 * k + 2 ] = color.b * intensity;
@@ -53,7 +53,6 @@ function generatePointCloudGeometry( vertices, color ){
 
 }
 
-
 function generatePointCloud( vertices, color ) {
 
     var geometry = new THREE.Geometry();
@@ -65,11 +64,20 @@ function generatePointCloud( vertices, color ) {
     for ( var i = 0, l = vertices.length; i < l; i ++ ) {
 
         vertex = vertices[ i ];
-        var v = new THREE.Vector3( vertex.x - 5, vertex.z, vertex.y );
+        var v = new THREE.Vector3( vertex.x - 17, vertex.z, -vertex.y );
         geometry.vertices.push( v );
 
-        var intensity = ( vertex.x + 0.1 ) * 7;
-        colors[ k ] = ( color.clone().multiplyScalar( intensity ) );
+        if (false) {
+        if (vertex.class == 1) {
+            colors[k] = new THREE.Color( 1, 0,0 );
+        } else if (vertex.class == 2) {
+            colors[k] = new THREE.Color(0, 1, 0);
+        } else if (vertex.class == 3) {
+            colors[k] = new THREE.Color(0, 0, 1);
+        } else {
+            var intensity = 1;
+            colors[ k ] = ( color.clone().multiplyScalar( intensity ) );
+        }
 
         k++;
     }
@@ -264,7 +272,7 @@ function display(obj_name) {
 }
 
 function generatePointCloudForCluster(obj_name) {
-    return generatePointCloud(data[obj_name]['vertices'], new THREE.Color( 0,1,0 ));
+    return generatePointCloud(data[obj_name]['vertices'], new THREE.Color( 0.5, 0.5,0.5 ));
 }
 
 function moveMode( event ) {
