@@ -67,7 +67,6 @@ function generatePointCloud( vertices, color ) {
         var v = new THREE.Vector3( vertex.x - 17, vertex.z, -vertex.y );
         geometry.vertices.push( v );
 
-        if (false) {
         if (vertex.class == 1) {
             colors[k] = new THREE.Color( 1, 0,0 );
         } else if (vertex.class == 2) {
@@ -267,7 +266,9 @@ function display(obj_name) {
 
     pointcloud = generatePointCloudForCluster( obj_name );
     pointcloud.rotation.y = rotation;
-    scene.add( pointcloud );
+    if (pointcloud) {
+        scene.add( pointcloud );
+    }
     pointcloud_name = obj_name;
 }
 
