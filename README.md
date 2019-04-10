@@ -3,7 +3,9 @@
 # Antsy 3D
 Lightweight point cloud annotation tool for instance-level segmentation using fat markers and raytracing.
 
-> Sorry, current version using skinny (1-pixel) marker. :( Another option is to use Three.js's built-in octotree and color entire boxes.
+> Notes:
+> - This has now evolved into a more sophisticated LiDaR annotator: [LiDaR Annotator by B. Wang et. al.](https://github.com/bernwang/LiDAR-annotator) I recommend using that instead.
+> - Sorry, current version using skinny (1-pixel) marker. :( Another option is to use Three.js's built-in octotree and color entire boxes.
 
 # Usage
 
